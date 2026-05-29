@@ -7,4 +7,4 @@ title: Spotify Explicitness Classifier
 
 A data science project analyzing Spotify audio features across five genre categories to predict whether a track is explicit.
 
-**By [Your Name]**
+**By Canyon Crutchfield and Nate McNeill**
