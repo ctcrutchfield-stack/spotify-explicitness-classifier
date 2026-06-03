@@ -54,7 +54,7 @@ Here is a sample of the cleaned DataFrame:
 
 <iframe
   src="assets/fig_energy_box.html"
-  width="800"
+  width="100%"
   height="500"
   frameborder="0"
 ></iframe>
@@ -65,7 +65,7 @@ This box plot compares the energy distributions of explicit and non-explicit tra
 
 <iframe
   src="assets/fig_valence_hist.html"
-  width="800"
+  width="100%"
   height="500"
   frameborder="0"
 ></iframe>
@@ -105,7 +105,7 @@ A permutation test using difference in means yielded a p-value of 0.0 — in non
 
 <iframe
   src="assets/fig_missingness_explicit.html"
-  width="800"
+  width="100%"
   height="500"
   frameborder="0"
 ></iframe>
@@ -130,7 +130,7 @@ We used a one-tailed permutation test with 500 trials. The observed difference i
 
 <iframe
   src="assets/fig_hypothesis.html"
-  width="800"
+  width="100%"
   height="500"
   frameborder="0"
 ></iframe>
@@ -220,7 +220,7 @@ We chose this comparison because metal is the genre with the most training examp
 
 <iframe
   src="assets/fig_fairness.html"
-  width="800"
+  width="100%"
   height="500"
   frameborder="0"
 ></iframe>
