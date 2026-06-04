@@ -8,3 +8,4 @@ defaults:
     values:
       layout: single
       classes: wide
+      author_profile: false
