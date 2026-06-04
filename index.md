@@ -1,4 +1,3 @@
-
 **By Canyon Crutchfield and Nate McNeill**
 
 ---
@@ -9,9 +8,9 @@ In this project we explore a dataset provided by Spotify of songs from dozens of
 
 Our central question is: **Can we predict whether a song is explicit based on its audio features?**
 
-This matters because the relationship between a song's audio features and its lyrical content is obscure. If you can accurately predict explicit songs given the base audio features you can automate content modertaion and musical recommendations without needing to sift through the actual songs lyrcis
+This matters because the relationship between a song's audio features and its lyrical content is obscure. If you can accurately predict explicit songs given the base audio features you can automate content moderation and musical recommendations without needing to sift through the actual songs lyrics
 
-The dataset contains **18,000 rows** after cleaning. With the following relevany columns:
+The dataset contains **18,000 rows** after cleaning. With the following relevant columns:
 
 | Column | Description |
 |---|---|
@@ -20,7 +19,7 @@ The dataset contains **18,000 rows** after cleaning. With the following relevany
 | `loudness` | Overall loudness in decibels (typically –60 to 0 dB) |
 | `speechiness` | Presence of spoken words, higher values indicate more speech-like content |
 | `danceability` | How suitable a track is for dancing based on rhythm and beat |
-| `valence` | Musical positivity, high = happy, low = sad/anrgy|
+| `valence` | Musical positivity, high = happy, low = sad/angry |
 | `acousticness` | Confidence that the track is acoustic, from 0.0 to 1.0 |
 | `instrumentalness` | Predicts whether a track has no vocals |
 | `liveness` | Detects the presence of a live audience |
@@ -81,7 +80,7 @@ The table below shows mean audio features broken down by genre. It reveals the "
 | metal            |          0.396 |    0.887 |     0.312 |     -5.504 |          0.019 |
 | urban            |          0.675 |    0.66  |     0.592 |     -6.761 |          0.282 |
 
-Metal stands out with the highest energy and lowest valence by a lot. Latin and urban lead in danceability. Acoustic tracks are the quietest and most acoustic. These observations show the unique sound portfoloio for each genre that we selected. Also, it shows how genre is an important predictor of sound features.
+Metal stands out with the highest energy and lowest valence by a lot. Latin and urban lead in danceability. Acoustic tracks are the quietest and most acoustic. These observations show the unique sound portfolio for each genre that we selected, and demonstrate how genre is an important predictor of audio features.
 
 ---
 
@@ -89,14 +88,14 @@ Metal stands out with the highest energy and lowest valence by a lot. Latin and 
 
 ### NMAR Analysis
 
-For the missingness our cleaned dataframe only has 1 column with missing values and that is `tempo`. In our data frame, tempo is missing 2918 values out of the 18000 entries. So now we need to determine that cause of the missing values. We believe that `tempo` could potentially be NMAR, we know that Spotify uses algorithms to detect BPM so irregular beats could slip by the `tempo` measurement taken by Spotify. To truly know we would need to know if the detection failed on the song or simply wasn't run. Nonetheless, we will run tests to see if its MAR or MCAR on any columns.
+For the missingness our cleaned dataframe only has 1 column with missing values and that is `tempo`. In our data frame, tempo is missing 2918 values out of the 18000 entries. So now we need to determine that cause of the missing values. We believe that `tempo` could potentially be NMAR, we know that Spotify uses algorithms to detect BPM so irregular beats could slip by the `tempo` measurement taken by Spotify. To truly know we would need to know if the detection failed on the song or simply wasn't run. Nonetheless, we will run tests to see if it's MAR or MCAR on any columns.
 
 ### Missingness Dependency
 
 Analysis of missingness of `tempo` on other columns
 
 **Tempo missingness IS dependent on `energy` (MAR):**
-A permutation test using difference in means yielded a p-value of 0.0. Out of the 500 random permutation trials that we ran, none produced a difference as extreme as observed. Tracks with missing tempo tend to have higher energy on average, hinting that high energy with more unqiue and complex beats have higher rates of missingness.
+A permutation test using difference in means yielded a p-value of 0.0. Out of the 500 random permutation trials that we ran, none produced a difference as extreme as observed. Tracks with missing tempo tend to have higher energy on average, hinting that high energy with more unique and complex beats have higher rates of missingness.
 
 **Tempo missingness IS dependent on `explicit` (MAR):**
 
@@ -107,7 +106,7 @@ A permutation test using difference in means yielded a p-value of 0.0. Out of th
   frameborder="0"
 ></iframe>
 
-Using TVD as the test statistic due to `explicit` being a categorical column, the permutation test p-value was 0.004. This is significant enough to conclude that missing values in `tempo` is dependant on `explicit`.
+Using TVD as the test statistic due to `explicit` being a categorical column, the permutation test p-value was 0.004. This is significant enough to conclude that missing values in `tempo` are dependent on `explicit`.
 
 **Tempo missingness is NOT dependent on `duration_ms` :**
 The permutation p-value was 0.468 — the observed difference in mean duration between tempo-missing and tempo-present tracks is well within what chance alone could produce. Song length does not appear to influence whether tempo is recorded.
@@ -142,9 +141,9 @@ However, this result does not hold uniformly across all genres. Latin and urban 
 
 **Prediction Problem:** Given the audio features of a Spotify track, predict whether a song is explicit.
 
-This is a ** Binary Classification ** prediction model. The response variable is `explicit` this is what we are trying to predict given the audio features of a song, the features that are going to be used are `energy`, `danceability`, `valence`, `loudness`, `acousticness`, `instrumentalness`, `tempo`, `speechiness`, and `liveness`. All of the features will be available to us before we predict the explicit label. 
+This is a **Binary Classification** prediction model. The response variable is `explicit` this is what we are trying to predict given the audio features of a song, the features that are going to be used are `energy`, `danceability`, `valence`, `loudness`, `acousticness`, `instrumentalness`, `tempo`, `speechiness`, and `liveness`. All of the features will be available to us before we predict the explicit label. 
 
-For our evaluation metric of the model we chose to use the **F1-Score of the model**. This is because the data set is significantly weighted to non explicit songs so a naive model that just guess `False` would result in 87% accuracy. This is why F1-score is more appropiate, is emphasizes the importance of getting the `True` values correct.
+For our evaluation metric of the model we chose to use the **F1-Score of the model**. This is because the data set is significantly weighted to non explicit songs so a naive model that just guesses `False` would result in 87% accuracy. This is why F1-score is more appropriate — it emphasizes the importance of getting the `True` values correct.
 
 ---
 
@@ -162,9 +161,9 @@ Both features were standardized using `StandardScaler` within a single `sklearn`
 | Train | 0.2506 |
 | Test | 0.2398 |
 
-The train and test F1 scores of 0.2506 and 0.2398 suggests the model is following the general trend without overfitting the training data, the low score shows that `energy` ans `loudness` don't offer enough information to fully optimize our model. This gives a clear target for improvement in the final model
+The train and test F1 scores of 0.2506 and 0.2398 are close to each other, suggesting the model generalizes without overfitting. However, this is not a good baseline model — an F1 of ~0.24 means the model fails to identify the vast majority of explicit tracks correctly. This is expected given that we are only using two features, and energy and loudness alone do not capture enough of the signal needed to distinguish explicit from non-explicit songs across diverse genres. The baseline serves as a useful lower bound to measure improvement against in the final model.
 
-We could potentially add more features to the model or we could also switch the model to a random forest to capture non linear relationship between variables. We think that random forest would be a good idea along with feature engineering to generate a more optimized classifying model
+We could potentially add more features to the model or we could also switch the model to a random forest to capture non linear relationships between variables. We think that random forest would be a good idea along with feature engineering to generate a more optimized classifying model.
 
 ---
 
@@ -174,13 +173,13 @@ We could potentially add more features to the model or we could also switch the 
 
 We included all remaining audio features (danceability, valence, acousticness, instrumentalness, liveness) and one-hot encoded genre_category.
 
-These features combine to describe the sound profile of the track. `acousticness` and `instrumentalness` are  meaningful, high acoustic and instrumental songs don't have as much speech in them, and the genres that they fall into have lower rates of explicit language. 
+These features combine to describe the sound profile of the track. `acousticness` and `instrumentalness` are meaningful — high acoustic and instrumental songs don't have as much speech in them, and the genres that they fall into have lower rates of explicit language. 
 
 `valence` captures emotional tone. Explicit tracks tend toward aggression or raw emotion rather than positivity. 
 
 `danceability` and `liveness` add context about the performance setting and rhythm structure, which correlate with genre norms around language.
 
-`genre_category` (OHE): The genre of a song is highly cultural, with the different cultures having differing views on the stigma of explicit language. A urban track uses language that would never appear in an acoustic folk song. That difference in culture leads to differnt rates of explicit language in the songs, making it one of the most predictive features we could include. We need to use one-hot encoding because `genre_category` has no inherit order.
+`genre_category` (OHE): The genre of a song is highly cultural, with different cultures having differing norms around explicit language. An urban track uses language that would never appear in an acoustic folk song. That difference in culture leads to different rates of explicit language in the songs, making it one of the most predictive features we could include. We need to use one-hot encoding because `genre_category` has no inherent order.
 
 ### Feature Engineering
 
@@ -188,10 +187,10 @@ Feature engineering 2 columns
 
 `energy_x_loudness` — songs that are both high in energy and loudness prompt a much stronger signal of explicitness. Easier to capture these together than to compare the relation of either one on their own
 
-`speechiness` applying QuantileTransformer this distribution is very skewed because most songs have low speechiness other than spoken word/rap songs. High speechiness values allows a lot more opportunity for explicit words to be used because there are higher levels of words used. For example, EDM songs have a very low speechiness value because there is not many lyrics or vocals involved, so therefore they have a lesser chance of using explicit language. The QuantileTransformer is used so that the model can better distinct the crowded low value speechiness values.
+`speechiness` applying QuantileTransformer this distribution is very skewed because most songs have low speechiness other than spoken word/rap songs. High speechiness values allows a lot more opportunity for explicit words to be used because there are higher levels of words used. For example, EDM songs have a very low speechiness value because there are not many lyrics or vocals involved, so therefore they have a lesser chance of using explicit language. The QuantileTransformer is used so that the model can better distinguish the crowded low-value speechiness values.
 
 Hyperparameters to Tune
-We plan to tune two hyperparameters for a RandomForestClassifier, we chose this model to capture the non-linear realtionships between features and to deal with the imbalance between explicit and non-explicit songs
+We plan to tune two hyperparameters for a RandomForestClassifier, we chose this model to capture the non-linear relationships between features and to deal with the imbalance between explicit and non-explicit songs
 
 n_estimators: Number of trees within the forest. The more trees a forest has the more it reduces variance by averaging over more independent trials, with diminishing returns. We iterate over [100, 200, 250] to find the optimal level.
 
