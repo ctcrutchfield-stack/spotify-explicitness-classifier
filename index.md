@@ -49,13 +49,13 @@ This is the markdown of the first rows of the cleaned dataframe with the relevan
 ### Univariate Analysis
 
 <iframe
-  src="assets/fig_energy_box.html"
+  src="assets/fig_speechiness_hist.html"
   width="100%"
   height="500"
   frameborder="0"
 ></iframe>
 
-This box plot compares the energy distributions of explicit and non-explicit tracks. Explicit tracks have a noticeably higher median energy (0.825) compared to non-explicit tracks (0.766), along with the entire box plot being shifted upward. We found this very intriguing so we further explore this relationship later on in the project
+The distribution of speechiness across all 18,000 tracks is heavily right-skewed the vast majority of songs cluster near zero, with only a small tail of high-speechiness tracks (spoken word, rap). This is important to note for later on
 
 ### Bivariate Analysis
 
@@ -141,7 +141,7 @@ However, this result does not hold uniformly across all genres. Latin and urban 
 
 **Prediction Problem:** Given the audio features of a Spotify track, predict whether a song is explicit.
 
-This is a **Binary Classification** prediction model. The response variable is `explicit` this is what we are trying to predict given the audio features of a song, the features that are going to be used are `energy`, `danceability`, `valence`, `loudness`, `acousticness`, `instrumentalness`, `tempo`, `speechiness`, and `liveness`. All of the features will be available to us before we predict the explicit label. 
+This is a **Binary Classification** prediction model. The response variable is `explicit` this is what we are trying to predict given the audio features of a song, the features that are going to be used are `energy`, `danceability`, `valence`, `loudness`, `acousticness`, `instrumentalness`, `tempo`, `speechiness`, and `liveness`. All audio features are computed by Spotify at the time a track is uploaded, so they are all available at prediction time.
 
 For our evaluation metric of the model we chose to use the **F1-Score of the model**. This is because the data set is significantly weighted to non explicit songs so a naive model that just guesses `False` would result in 87% accuracy. This is why F1-score is more appropriate — it emphasizes the importance of getting the `True` values correct.
 
@@ -154,7 +154,7 @@ Our baseline model is a **Logistic Regression** trained on two quantitative feat
 - `energy` — quantitative continuous
 - `loudness` — quantitative continuous
 
-Both features were standardized using `StandardScaler` within a single `sklearn` Pipeline. No categorical features were included. We used `class_weight='balanced'` to account for the label imbalance.
+Both features were standardized using `StandardScaler` within a single `sklearn` Pipeline. No categorical features were included. We used `class_weight='balanced'` to account for the label imbalance. Both features are quantitative continuous; there are no ordinal or nominal features in the baseline model.
 
 | Split | F1-Score |
 |---|---|
