@@ -1,4 +1,4 @@
-# 🎵 Explicit or Not? Predicting Song Explicitness from Audio Features
+# Explicit or Not? Predicting Song Explicitness from Audio Features
 
 **By Canyon Crutchfield and Nate McNeill**
 
@@ -6,22 +6,22 @@
 
 ## Introduction
 
-This project explores a Spotify dataset of music tracks spanning dozens of genres, each described by a rich set of audio features such as energy, danceability, valence, loudness, and speechiness. We narrowed our focus to five distinct genre categories — **urban** (hip-hop, R&B), **metal**, **electronic** (EDM, house, dubstep, techno), **acoustic** (folk, singer-songwriter), and **latin** (reggaeton, salsa, reggae) — giving us 18,000 tracks total after cleaning.
+In this project we explore a dataset provided by Spotify of songs from dozens of genres, with each song having audio features such as energy, danceability, valence, loudness, and speechiness. I honed our focus on 5 distinct and important musical genres — **urban** (hip-hop, R&B), **metal**, **electronic** (EDM, house, dubstep, techno), **acoustic** (folk, singer-songwriter), and **latin** (reggaeton, salsa, reggae) — giving us 18,000 tracks total after cleaning.
 
-Our central question is: **Can we predict whether a song is explicit based solely on its audio features?**
+Our central question is: **Can we predict whether a song is explicit based on its audio features?**
 
-This matters because the relationship between a song's sonic characteristics and its lyrical content is non-obvious. If audio features are meaningful predictors of explicitness, that has implications for content moderation, parental controls, and music recommendation systems — all without needing to process the actual lyrics.
+This matters because the relationship between a song's audio features and its lyrical content is obscure. If you can accurately predict explicit songs given the base audio features you can automate content modertaion and musical recommendations without needing to sift through the actual songs lyrcis
 
-The dataset contains **18,000 rows** after cleaning. The columns most relevant to our question are:
+The dataset contains **18,000 rows** after cleaning. With the following relevany columns:
 
 | Column | Description |
 |---|---|
 | `explicit` | Boolean — whether the track is marked explicit on Spotify |
-| `energy` | A measure of intensity and activity, from 0.0 to 1.0 |
+| `energy` | Measures intensity, from 0.0 to 1.0 |
 | `loudness` | Overall loudness in decibels (typically –60 to 0 dB) |
-| `speechiness` | Presence of spoken words; higher values indicate more speech-like content |
+| `speechiness` | Presence of spoken words, higher values indicate more speech-like content |
 | `danceability` | How suitable a track is for dancing based on rhythm and beat |
-| `valence` | Musical positivity — high valence sounds happy, low valence sounds sad/angry |
+| `valence` | Musical positivity, high = happy, low = sad/anrgy|
 | `acousticness` | Confidence that the track is acoustic, from 0.0 to 1.0 |
 | `instrumentalness` | Predicts whether a track has no vocals |
 | `liveness` | Detects the presence of a live audience |
@@ -33,22 +33,20 @@ The dataset contains **18,000 rows** after cleaning. The columns most relevant t
 
 ### Data Cleaning
 
-We performed four main cleaning steps:
+1. **Dropped a corrupted row** this row had many corrupted values, in `artists`, `album_name`, and `track_name`. It was the only row with missing values across these columns.
+2. **Dropped the `Unnamed: 0` column**, useless column that did not add any new information, resulted from loading it from the CSV.
+3. **Extracted the year from `release_date`** every song had year as the first 4 values in the date column, but not every entry had months or days. So we sliced the first 4 from each entry.
+4. **Consolidated the dozens of raw genres into 5 broad categories** using a dictionary to map it. We chose urban, metal, electronic, acoustic, and latin. These genres were chosen because of the distinct audio features of each genre. Urban has high speechiness and danceability, metal has extremely high energy and low valence, acoustic has low energy and high acousticness, latin has high valence and danceability, and electronic has high energy with near-zero acousticness. These genre cover a large variety of audio features, and they were some of our personal favorite genres to listen to.
+   
+This is the markdown of the first rows of the cleaned dataframe with the relevant columns:
 
-1. **Dropped a corrupted row** that had missing values across `artists`, `album_name`, and `track_name`. With only one such row out of 114,000, dropping it was the right call — imputation would be meaningless for string identifiers.
-2. **Dropped the `Unnamed: 0` column**, which was a redundant row index carried over from the CSV with no analytical value.
-3. **Extracted the year from `release_date`** by slicing the first four characters. Every entry had a consistent YYYY prefix regardless of whether the full date was present, so this was lossless.
-4. **Consolidated ~114 raw genres into 5 broad categories** using a mapping dictionary. We selected genres that are acoustically distinct from one another to maximize the analytical signal: urban, metal, electronic, acoustic, and latin. This reduced the dataset to 18,000 rows — 1,000 per raw sub-genre, reflecting the original dataset's structured sampling.
-
-Here is a sample of the cleaned DataFrame:
-
-| track_name | artists | genre_category | energy | loudness | explicit | year |
-|---|---|---|---|---|---|---|
-| INDUSTRY BABY | Lil Nas X | urban | 0.816 | -4.735 | True | 2021 |
-| Blinding Lights | The Weeknd | urban | 0.730 | -5.934 | False | 2019 |
-| Master of Puppets | Metallica | metal | 0.985 | -6.871 | False | 1986 |
-| Skinny Love | Bon Iver | acoustic | 0.339 | -11.729 | False | 2007 |
-| Despacito | Luis Fonsi | latin | 0.660 | -5.610 | False | 2017 |
+| track_name                 | artists                | genre_category   | explicit   |   energy |   loudness |   speechiness |   danceability |   valence |
+|:---------------------------|:-----------------------|:-----------------|:-----------|---------:|-----------:|--------------:|---------------:|----------:|
+| Comedy                     | Gen Hoshino            | acoustic         | False      |   0.461  |     -6.746 |        0.143  |          0.676 |     0.715 |
+| Ghost - Acoustic           | Ben Woodward           | acoustic         | False      |   0.166  |    -17.235 |        0.0763 |          0.42  |     0.267 |
+| To Begin Again             | Ingrid Michaelson;ZAYN | acoustic         | False      |   0.359  |     -9.734 |        0.0557 |          0.438 |     0.12  |
+| Can't Help Falling In Love | Kina Grannis           | acoustic         | False      |   0.0596 |    -18.515 |        0.0363 |          0.266 |     0.143 |
+| Hold On                    | Chord Overstreet       | acoustic         | False      |   0.443  |     -9.681 |        0.0526 |          0.618 |     0.167 |
 
 ### Univariate Analysis
 
@@ -59,7 +57,7 @@ Here is a sample of the cleaned DataFrame:
   frameborder="0"
 ></iframe>
 
-This box plot compares the energy distributions of explicit and non-explicit tracks. Explicit tracks have a noticeably higher median energy (0.825) compared to non-explicit tracks (0.766), and the entire distribution is shifted upward. This early signal motivated our hypothesis test in the next section.
+This box plot compares the energy distributions of explicit and non-explicit tracks. Explicit tracks have a noticeably higher median energy (0.825) compared to non-explicit tracks (0.766), along with the entire box plot being shifted upward. We found this very intriguing so we further explore this reltaionship later on in the project
 
 ### Bivariate Analysis
 
