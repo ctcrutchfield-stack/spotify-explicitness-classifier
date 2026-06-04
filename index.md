@@ -213,7 +213,7 @@ The final model improved test F1 by roughly 40 percentage points over the baseli
 ## Fairness Analysis
 
 **Groups:** Metal tracks (Group X) vs. Non-metal tracks (Group Y)  
-**Metric:** Precision — of all tracks the model predicts as explicit, what fraction actually are?
+**Metric:** Precision, of all tracks the model predicts as explicit, what fraction actually are?
 
 We chose this comparison because metal is the genre with the most training examples and the lowest real-world explicit rate, so we were curious whether the model had learned genre-specific biases.
 
@@ -230,4 +230,4 @@ We chose this comparison because metal is the genre with the most training examp
   frameborder="0"
 ></iframe>
 
-The permutation p-value was **0.0** (less than 0.001). Since p < 0.01, we **reject the null hypothesis**. Our model's precision differs significantly between metal and non-metal tracks — it is less effective at correctly predicting explicitness for metal songs compared to non-metal songs. This fairness disparity likely stems from the fact that metal has a very low base rate of explicitness, making it harder for the model to achieve high precision on that group. Future work could explore genre-stratified training or threshold adjustment to address this imbalance.
+The permutation p-value was **0.0**, this is statistically significant so we **reject the null hypothesis**. Our model's precision differs significantly between metal and non-metal tracks. It is far less effective at predicting the explicitness of metal vs non-metal songs. This fairness disparity likely stems from the fact that metal has a very low base rate of explicitness, making it harder for the model to achieve high precision on that group.
