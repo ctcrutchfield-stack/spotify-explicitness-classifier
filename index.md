@@ -109,7 +109,7 @@ A permutation test using difference in means yielded a p-value of 0.0. Out of th
 Using TVD as the test statistic due to `explicit` being a categorical column, the permutation test p-value was 0.004. This is significant enough to conclude that missing values in `tempo` are dependent on `explicit`.
 
 **Tempo missingness is NOT dependent on `duration_ms` :**
-The permutation p-value was 0.468 — the observed difference in mean duration between tempo-missing and tempo-present tracks is well within what chance alone could produce. Song length does not appear to influence whether tempo is recorded.
+The permutation p-value was 0.468. The observed difference in mean duration between tempo-missing and tempo-present tracks is well within what chance alone could produce. Song length does not appear to influence whether tempo is recorded.
 
 ---
 
@@ -161,7 +161,7 @@ Both features were standardized using `StandardScaler` within a single `sklearn`
 | Train | 0.2506 |
 | Test | 0.2398 |
 
-The train and test F1 scores of 0.2506 and 0.2398 are close to each other, suggesting the model generalizes without overfitting. However, this is not a good baseline model — an F1 of ~0.24 means the model fails to identify the vast majority of explicit tracks correctly. This is expected given that we are only using two features, and energy and loudness alone do not capture enough of the signal needed to distinguish explicit from non-explicit songs across diverse genres. The baseline serves as a useful lower bound to measure improvement against in the final model.
+The train and test F1 scores of 0.2506 and 0.2398 are close to each other, suggesting the model generalizes without overfitting. However, this is not a good baseline model. An F1 of ~0.24 means the model fails to identify the vast majority of explicit tracks correctly. This is expected given that we are only using two features, and energy and loudness alone do not capture enough of the signal needed to distinguish explicit from non-explicit songs across diverse genres. The baseline serves as a useful lower bound to measure improvement against in the final model.
 
 We could potentially add more features to the model or we could also switch the model to a random forest to capture non linear relationships between variables. We think that random forest would be a good idea along with feature engineering to generate a more optimized classifying model.
 
