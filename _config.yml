@@ -1,8 +1,10 @@
 remote_theme: mmistakes/minimal-mistakes
+title: "Explicit or Not?"
+subtitle: "A Spotify Audio Analysis"
+name: "Canyon Crutchfield & Nate McNeill"
 plugins:
   - jekyll-remote-theme
   - jekyll-include-cache
-index: index.md
 defaults:
   - scope:
       path: ""
@@ -10,5 +12,3 @@ defaults:
       layout: single
       classes: wide
       author_profile: false
-      sidebar:
-        nav: false
