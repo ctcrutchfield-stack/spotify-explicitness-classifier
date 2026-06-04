@@ -181,9 +181,7 @@ These features combine to describe the sound profile of the track. `acousticness
 
 `genre_category` (OHE): The genre of a song is highly cultural, with different cultures having differing norms around explicit language. An urban track uses language that would never appear in an acoustic folk song. That difference in culture leads to different rates of explicit language in the songs, making it one of the most predictive features we could include. We need to use one-hot encoding because `genre_category` has no inherent order.
 
-### Feature Engineering
-
-Feature engineering 2 columns
+### Feature Engineering:
 
 `energy_x_loudness` — songs that are both high in energy and loudness prompt a much stronger signal of explicitness. Easier to capture these together than to compare the relation of either one on their own
 
